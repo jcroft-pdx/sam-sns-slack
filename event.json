@@ -1,0 +1,11 @@
+{
+  "Records": [
+    {
+      "Sns": {
+        "Message": "Test message",
+        "TopicArn": "the arn",
+        "Timestamp": "2020-09-24T00:00:00.123Z"
+      }
+    }
+  ]
+}

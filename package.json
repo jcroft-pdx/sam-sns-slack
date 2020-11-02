@@ -1,0 +1,15 @@
+{
+  "name": "sns-to-slack",
+  "version": "1.0.0",
+  "description": "Simply sends AWS SNS message to a slack webhook url.",
+  "main": "src/handlers/sns-to-slack.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "John Croft",
+  "license": "ISC",
+  "dependencies": {
+    "@slack/webhook": "^5.0.3",
+    "date-and-time": "^0.9.0"
+  }
+}

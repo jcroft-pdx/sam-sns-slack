@@ -1,0 +1,46 @@
+# This is the SAM template that represents the architecture of your serverless application
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-template-basics.html
+
+# The AWSTemplateFormatVersion identifies the capabilities of the template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  sns-to-slack
+
+# Transform section specifies one or more macros that AWS CloudFormation uses to process your template
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
+Transform:
+- AWS::Serverless-2016-10-31
+
+# Resources declares the AWS resources that you want to include in the stack
+# https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
+Resources:
+  # This is an SNS Topic with all default configuration properties. To learn more about the available options, see
+  # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-topic.html
+  TestSnsToSlackTopic:
+    Type: AWS::SNS::Topic
+
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  SNSToSlack:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A Lambda function that sends SNS to a Slack channel.
+      Environment:
+        Variables:
+          SLACK_WEBHOOK_URL: "Enter your Slack Channel's webhook url"
+          TIME_OFFSET: "-7"
+          MESSAGE_HEADER: "SNS-TO-SLACK Header"
+      Runtime: nodejs12.x
+      Handler: src/handlers/sns-to-slack.snsToSlackHandler
+      # This property associates this Lambda function with the SNS topic defined above, so that whenever the topic
+      # receives a message, the Lambda function is invoked
+      Events:
+        SNSTopicEvent:
+          Type: SNS
+          Properties:
+            Topic: !Ref TestSnsToSlackTopic
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        # Give Lambda basic execution Permission
+        - AWSLambdaBasicExecutionRole
